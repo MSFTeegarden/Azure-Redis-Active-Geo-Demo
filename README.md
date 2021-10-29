@@ -46,6 +46,10 @@ Create two AKS instances--one in the West US 2 region and one in the East US 2 r
 
 ![create AKS instance](/docs/createAKS.jpg)
 
+At this point, you should have two AKS instances and two Azure Cache for Redis instances:
+
+![provisioned instances](/docs/finishedservices.jpg)
+
 ### 3. Prepare the YAML files
 YAML files tell AKS how to provision the deployment. We need to provide:
 - The location of the container which holds the app
@@ -74,7 +78,24 @@ With both screens up, you should see that changing the inventory in one region i
 
 ![Demo running](/docs/finished.png)
 
-You did it! Click on the buttons and explore the demo. To reset the count, add "/reset" after the url. e.g. "<IP address>/reset"
+You did it! Click on the buttons and explore the demo. To reset the count, add "/reset" after the url. e.g. `<IP address>/reset`
+
 
 ## Building Your Own Container (Optional)
+If you'd like to modify the code, or would just like to see the whole process through, you'll need to build the container from scratch and upload it to a container registry of your choice. To do this you'll first need to:
+- Have docker installed on your local machine
+- If developing on Windows, install [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install)
+
+[This tutorial](https://docs.microsoft.com/en-us/azure/aks/tutorial-kubernetes-prepare-app) offers excellent step-by-step instructions on how to generate a container image and test it on your local machine. The same set of instructions should work for this code base with a few changes:
+- You'll need to update the enviornment variables in the `docker-compose.yml`included in this repo, similar to what you did with the `app_west` and `app_east` YAML files. To minimize variables, I recommend using the same Redis instances and connection strings you created for the demo.
+- If you're testing with a basic, standard, or premium cache, you should use port 6379 and ensure that SSL is disabled when creating the cache. If you're using Enterprise caches, you'll need to use port 10000. 
+- When testing on a local machine, be sure to add the port 8080 after localhost in the address bar. i.e. `localhost:8080`
+
+Once the container is created, you can follow the tutorial for instructions on how to push it to an [Azure Container Registry](https://azure.microsoft.com/en-us/services/container-registry/) instance. Some tips:
+- After having issues with permissions, I found it significantly easier to use the Azure Cloud Shell wherever possible. 
+- You'll need to attach the ACR instance to your AKS instances. Here are [instructions on how to do that](https://docs.microsoft.com/en-us/azure/aks/cluster-container-registry-integration?tabs=azure-cli)
+- You'll also need to modify the YAML files we were using earlier once it's time to run. Simply change the image from `sanarmsft/azurecachedemo:latest` to the address of your container image in ACR.
+
+
+
 
