@@ -1,0 +1,105 @@
+<!-- views/index.ejs -->
+<!doctype html>
+<html>
+<head>
+    <title>Azure Cache for Redis Enterprise <%= appLocation %></title>
+    <!-- load bootstrap css -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <style>
+        body        { padding-top:0px; }
+    </style>
+
+    <!-- load JQuery -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- load Socket.io -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+
+    <!-- load crdtdemo.js -->
+    <script type="text/javascript" src="js/crdtdemo.js"></script>
+
+</head>
+<body>
+<div class="container">
+        <h3><%= appLocation %></h3>
+        <div class="row row-divided">
+            <div class="col-xs-4 text-center">
+              <img style="width: 240px; height: 249px;" src="img/Booth.png">
+            </div>
+            <div class="col-xs-4 text-center">
+              <img style="width: 240px; height:249px;" src="img/Geek.png">
+            </div>
+        	  <div class="col-xs-4 text-center">
+              <img style="width: 210px; height: 249px;" src="img/Unicorn.jpg">
+        	  </div>
+        </div>
+        <div class="row row-divided">
+            <div class="col-xs-4 h3 text-center">
+              <label class="text-dark" id="count1" name="count1">Checking stock...</label>
+            </div>
+            <div class="col-xs-4 h3 text-center">
+              <label class="text-dark" id="count2" name="count2">Checking stock...</label>
+            </div>
+        	  <div class="col-xs-4 h3 text-center">
+              <label class="text-dark" id="count3" name="count3">Checking stock...</label>
+        	  </div>
+        </div>
+        <div class="row row-divided">
+          <div class="col-xs-4 text-center">
+            <button class="btn btn-success" id="button1" name="button1" onClick="countClick('count1')">Buy Now</button>
+          </div>
+          <div class="col-xs-4 text-center">
+            <button class="btn btn-success" id="button2" name="button2" onClick="countClick('count2')">Buy Now</button>
+          </div>
+          <div class="col-xs-4 text-center">
+            <button class="btn btn-success" id="button3" name="button3" onClick="countClick('count3')">Buy Now</button>
+          </div>
+      </div>
+</div>
+<script type="text/javascript">
+window.onload = function() {
+  getCount('1');
+  getCount('2');
+  getCount('3');
+};
+
+$(function (){
+    var socket = io();
+
+    socket.on('count1', function(value){
+      if (parseInt(value) <= 0) {
+        $("#count1").removeClass("text-dark");
+        $("#count1").addClass("text-danger");
+        $("#count1").html("Sold out");
+        $("#button1").attr("disabled", true);
+      } else {
+        $("#count1").html(value + " available");
+      }
+    });
+
+    socket.on('count2', function(value){
+      if (parseInt(value) <= 0) {
+        $("#count2").removeClass("text-dark");
+        $("#count2").addClass("text-danger");
+        $("#count2").html("Sold out");
+        $("#button2").attr("disabled", true);
+      } else {
+        $("#count2").html(value + " available");
+      }
+    });
+
+    socket.on('count3', function(value){
+      if (parseInt(value) <= 0) {
+        $("#count3").removeClass("text-dark");
+        $("#count3").addClass("text-danger");
+        $("#count3").html("Sold out");
+        $("#button3").attr("disabled", true);
+      } else {
+        $("#count3").html(value + " available");
+      }
+    });
+});
+</script>
+</body>
+</html>
