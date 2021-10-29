@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shoppingcart-app
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: shoppingcart
+  template:
+    metadata:
+      labels:
+        app: shoppingcart
+    spec:
+      containers:
+      - name: demoapp
+        image: sanarmsft/azurecachedemo:latest
+        resources:
+          limits:
+            cpu: "0.5"
+            memory: "250Mi"
+          requests:
+            cpu: "0.5"
+            memory: "128Mi"
+        env:
+         - name: REDIS_HOST
+           value: "demo-west.westus2.redisenterprise.cache.azure.net"  # can be full hostname or servicename in k8s
+         - name: REDIS_PASSWORD
+           value: "CfxAyl7sxKokKxM8RBxWSfc+TZ7H8dsH49tHHS2uGvY="
+         - name: REDIS_PORT
+           value: "10000"   # redis port
+         - name: HTTP_PORT
+           value: "8080"
+         - name: APP_LOCATION
+           value: "Seattle, WA" 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shoppingcart-svc
+spec:
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+  selector:
+    app: shoppingcart

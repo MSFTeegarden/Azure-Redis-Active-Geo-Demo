@@ -1,0 +1,13 @@
+version: '3'
+services:
+  shoppingcart:
+    build: .
+    container_name: shoppingcart
+    environment:
+      REDIS_HOST: "kyleredisdemo.redis.cache.windows.net"  # can be full hostname or servicename in k8s
+      REDIS_PASSWORD: "ucazF7Y9R6mhOf771BB494ULGtWgkoTztg+neBbjro8="
+      REDIS_PORT: "6379"   # redis port
+      HTTP_PORT: "8080"
+      APP_LOCATION: "Seattle, WA"  
+    ports:
+        - "8080:8080"
