@@ -17,7 +17,7 @@ The AKS instances and Redis instances are paired together in each region--West U
 ### 1. Create the Azure Cache for Redis instances
 First, create a new Azure Cache for Redis instance in the West US 2 region [^1]. Select the Enterprise E10 SKU, and agree to the marketplace terms [^2]. 
 
-![create Enterprise Redis cache](/docs/createnewcache.jpg)
+![create Enterprise Redis cache](/docs/createnewcache2.jpg)
 
 [^1]: You can use other regions than West and East US for this demo, but the Enterprise tier is not yet available in all regions, so check first
 [^2]: If you're using a Visual Studio Subscription or Azure Credits, you will still need to have a credit card on file to be billed for the marketplace component of the Enterprise tier price.
@@ -28,7 +28,7 @@ Select "Public Endpoint" for networking--this is **not** recommended for product
 
 Enable "Non-TLS access only" and click "configure" in the active geo-replication section.
 
-![configurecache](/docs/configurecache.jpg)
+![configurecache](/docs/configurecache2.jpg)
 
 Create a new active geo-replication group, select the box, and click "configure". You'll use this group name when linking the second cache. Select "Review + create" and then "Create." You'll need to wait for this cache to finish provisioning before provisioning the next cache instance so that they can be linked.
 
@@ -48,7 +48,7 @@ Create two AKS instances--one in the West US 2 region and one in the East US 2 r
 
 At this point, you should have two AKS instances and two Azure Cache for Redis instances:
 
-![provisioned instances](/docs/finishedservices.jpg)
+![provisioned instances](/docs/finishedservices2.jpg)
 
 ### 3. Prepare the YAML files
 YAML files tell AKS how to provision the deployment. We need to provide:
@@ -56,7 +56,7 @@ YAML files tell AKS how to provision the deployment. We need to provide:
 - Information about the cache, such as the connection key
 - The text that will display on our inventory page to identify the information.
 
-![YAML file breakdown](/docs/yamlfile.jpg)
+![YAML file breakdown](/docs/yamlfile2.jpg)
 
 1. The container is fortunately already compiled and ready to go. It can be found on dockerhub at [sanarmsft/azurecachedemo:latest](https://hub.docker.com/r/sanarmsft/azurecachedemo). If you'd like to build your own container, instructions are listed further below.
 2. The address of the Redis instance is passed through the enviornmental variable "REDIS_HOST". Update this with the address of your Redis instance in the appropriate region
