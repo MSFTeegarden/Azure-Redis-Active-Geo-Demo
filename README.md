@@ -56,4 +56,6 @@ Repeat the process with the other region, using the other YAML file.
 
 With both screens up, you should see that changing the inventory in one region is virtually instantly reflected in the other region. 
 
+![Demo running](/docs/finished.png)
+
 ### Building Your Own Container (Optional)
