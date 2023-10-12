@@ -5,18 +5,16 @@
 */
 
 
-module.exports.listen = function(redisSub, redisClient, io) {
-  redisSub.subscribe("countchannel");
-
-  redisSub.on("message", function (channel, counter){
-    console.log("Sub channel: "+channel+": "+counter);
-    redisClient.get(counter, function(err, value){
-        if(err){
-          throw err;
-        }else{
-          console.log("Counter: "+value);
-          io.emit(counter, value);
-        }
-      });
+module.exports.listen = function (redisSub, redisClient, io) {
+  redisSub.v4.subscribe("countchannel", async function (counter, channel) {
+    console.log("Sub channel: " + channel + ": " + counter);
+    await redisClient.get(counter, function (err, value) {
+      if (err) {
+        throw err;
+      } else {
+        console.log("Counter: " + value);
+        io.emit(counter, value);
+      }
+    });
   });
 };

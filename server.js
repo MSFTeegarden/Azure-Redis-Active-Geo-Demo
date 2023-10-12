@@ -24,29 +24,25 @@ var redisHost = process.env.REDIS_HOST || 'localhost';
 var redisPassword = process.env.REDIS_PASSWORD;
 appLocation = process.env.APP_LOCATION || "";
 
-console.log('Redis host :' + redisHost);
-console.log('Redis port :' + redisPort);
-console.log('Redis app location :' + appLocation);
+console.log('Redis host : ' + redisHost);
+console.log('Redis port : ' + redisPort);
+console.log('Redis app location : ' + appLocation);
 
 // Redis client to query and publish to a channel
 var redisClient = redis.createClient({
   password: redisPassword,
+  legacyMode: true,
   socket: {
     host: redisHost,
-    port: redisPort
+    port: redisPort,
+    tls: true
   }
 });
 
 redisClient.connect();
 
 // Redis client to listen to a channel
-var redisSub = redis.createClient({
-  password: redisPassword,
-  socket: {
-    host: redisHost,
-    port: redisPort
-  }
-});
+var redisSub = redisClient.duplicate();
 
 redisSub.connect();
 
@@ -74,5 +70,5 @@ msglistener.listen(redisSub, redisClient, io);
 
 // Start the HTTP server
 http.listen(httpPort, function () {
-  console.log('HTTP listening on :' + httpPort);
+  console.log('HTTP listening on : ' + httpPort);
 });
