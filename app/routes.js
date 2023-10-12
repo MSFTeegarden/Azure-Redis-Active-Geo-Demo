@@ -7,10 +7,10 @@
 
 module.exports = function(app, redisClient) {
 
-		app.post('/decrcount', function(req, res){
+		app.post('/decrcount', async function(req, res){
 			console.log("POST ID:"+req.body.id);
 			var counter_id = req.body.id;
-			redisClient.decr(counter_id, function(err, value){
+			await redisClient.decr(counter_id, function(err, value){
 					if(err){
 						throw err;
 					}else{
@@ -22,10 +22,10 @@ module.exports = function(app, redisClient) {
 			res.sendStatus(200);
 		});
 
-		app.get('/getcount', function(req, res){
+		app.get('/getcount', async function(req, res){
 			console.log("GET ID:"+req.query.id);
 			var counter_id = req.query.id;
-			redisClient.get(counter_id, function(err, value){
+			await redisClient.get(counter_id, function(err, value){
 					if(err){
 						throw err;
 					}else{
@@ -37,11 +37,11 @@ module.exports = function(app, redisClient) {
 			);
 		});
 
-		app.get('/reset', function(req, res){
+		app.get('/reset', async function(req, res){
 			console.log("RESET COUNTS");
-			redisClient.set("count1", 9);
-			redisClient.set("count2", 13);
-			redisClient.set("count3", 5);
+			await redisClient.set("count1", 9);
+			await redisClient.set("count2", 13);
+			await redisClient.set("count3", 5);
 			res.redirect('/');
 		});
 
